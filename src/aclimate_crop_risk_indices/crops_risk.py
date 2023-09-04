@@ -2,7 +2,7 @@ import pandas as pd
 import glob
 import os
 import multiprocessing
-from codigo_calculos_aclimate import main
+from aclimate_crop_risk_indices.codigo_calculos_aclimate import main
 from tqdm import tqdm
 import concurrent.futures as fu
 

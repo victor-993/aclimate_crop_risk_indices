@@ -1,6 +1,6 @@
 import os
 import argparse
-from crops_risk import CropsRisk
+from aclimate_crop_risk_indices.crops_risk import CropsRisk
 import time
 
 def main():
