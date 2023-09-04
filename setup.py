@@ -20,6 +20,8 @@ setup(
         ],
     },
     install_requires=[
-        
+        "pandas==2.0.3",
+        "scipy==1.11.2",
+        "tqdm==4.66.1",
     ]
 )
