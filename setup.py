@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="aclimate_crop_risk_indices",
-    version='v0.0.1',
+    version='v0.0.2',
     description="Resampling module",
     url="https://github.com/victor-993/aclimate_crop_risk_indices",
     download_url="https://github.com/victor-993/aclimate_crop_risk_indices",
