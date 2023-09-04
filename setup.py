@@ -16,7 +16,7 @@ setup(
     python_requires=">=3.6",
     entry_points={
         'console_scripts': [
-            'aclimate_crop_risk=aclimate_crop_risk.aclimate_run_crop_risk:main',
+            'aclimate_crop_risk=aclimate_crop_risk_indices.aclimate_run_crop_risk:main',
         ],
     },
     install_requires=[
