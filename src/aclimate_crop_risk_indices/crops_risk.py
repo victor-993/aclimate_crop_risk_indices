@@ -47,7 +47,7 @@ class CropsRisk():
                 frequency = partes[3]
                 
                 file_config = os.path.join(folder_path, "crop_conf.csv")
-                df = pd.read_csv(file_config)
+                df = pd.read_csv(file_config, index_col=False)
 
                 self.configurations.append({
                     "id_estacion": ws,
