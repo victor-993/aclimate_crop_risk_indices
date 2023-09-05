@@ -6,7 +6,7 @@ import time
 def main():
     # Params
     # 0: Crop
-    # 1: Path root    
+    # 1: Path root
     # 2: Number of stations
 
     parser = argparse.ArgumentParser(description="Script for calculating crop risk indices")
