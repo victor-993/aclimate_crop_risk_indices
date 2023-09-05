@@ -8,14 +8,14 @@ from tqdm import tqdm
 import warnings  # Import the warnings module
 
 
-def process_data(data, parameters, ws, position):
+def process_data(data, parameters, ws):
     rain_limit = parameters[parameters['name'] == 'rain']['min'].iloc[0]
     min_temp = parameters[parameters['name'] == 'temp']['min'].iloc[0]
     max_temp = parameters[parameters['name'] == 'temp']['max'].iloc[0]
 
     weekly_results_list = []
 
-    pbar = tqdm(data.items(), desc=f"Processing data {ws}", position=position, mininterval=0.5)
+    pbar = tqdm(data.items(), desc=f"Processing data {ws}", mininterval=0.5)
 
     for file_name, df in data.items():
         weekly_data = pd.DataFrame()
@@ -80,14 +80,16 @@ def add_dates_week(statistical_results):
     statistical_results['start'] = statistical_results.apply(
         lambda row: datetime.datetime.strptime(f"{int(row['year'])}-{int(row['week'])}-1", "%Y-%W-%w"), axis=1)
     statistical_results['end'] = statistical_results['start'] + datetime.timedelta(days=6)
-    statistical_results.drop(['year'], axis=1, inplace=True)
+    statistical_results['start'] = statistical_results['start'].dt.strftime("%m/%d/%Y")
+    statistical_results['end'] = statistical_results['end'].dt.strftime("%m/%d/%Y")
+    statistical_results.drop(['year', 'week'], axis=1, inplace=True)
     return statistical_results
 
 def rearrange_columns(statistical_results, column_order):
     return statistical_results[column_order]
 
-def main(data, parameters, ws, crop, soil, position):
-    weekly_results = process_data(data, parameters, ws, position)
+def main(data, parameters, ws, crop, soil):
+    weekly_results = process_data(data, parameters, ws)
 
     variables = ['rainy_days', 'dry_days', 'cold_days', 'heat_days']
 
@@ -115,7 +117,6 @@ def main(data, parameters, ws, crop, soil, position):
 
     #Acrónimos
     statistical_results['measure'] = statistical_results['measure'].replace({'rainy_days': 'ag_ndll', 'dry_days': 'ag_nds', 'heat_days': 'ag_ndc', 'cold_days': 'ag_ndf'})
-    statistical_results.drop(['week'], axis=1)
     column_order = ['weather_station', 'soil', 'cultivar', 'start', 'end', 'measure', 'median', 'avg', 'min', 'max', 'quar_1', 'quar_2', 'quar_3', 'conf_lower', 'conf_upper', 'sd', 'perc_5', 'perc_95', 'coef_var']
     statistical_results = rearrange_columns(statistical_results, column_order)
 

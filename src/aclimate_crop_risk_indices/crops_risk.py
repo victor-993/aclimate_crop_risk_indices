@@ -68,15 +68,15 @@ class CropsRisk():
                 scenarios[nombre_archivo] = pd.read_csv(archivo)
             self.loaded_scenarios[ws] = scenarios
 
-    def procesar(self, dato, position):
+    def procesar(self, dato):
 
         self.load_scenario(dato["id_estacion"])
 
-        result = main(self.loaded_scenarios[dato["id_estacion"]], dato["df_configuracion"], dato["id_estacion"], dato["id_cultivar"], dato["id_soil"], position)
+        result = main(self.loaded_scenarios[dato["id_estacion"]], dato["df_configuracion"], dato["id_estacion"], dato["id_cultivar"], dato["id_soil"])
         result.to_csv(os.path.join(self.path_outputs_crop, f"{dato['file_name']}.csv"), na_rep=-1, index=False)
 
     def run(self):       
         self.read_configurations()
 
         with multiprocessing.Pool(self.cores) as pool:
-            pool.starmap(self.procesar, [(dato, i) for i, dato in enumerate(self.configurations)])
+            pool.map(self.procesar, self.configurations)
