@@ -29,7 +29,7 @@ def main():
 
     #llamado a la funcion que paralelizara todo
     para = CropsRisk(path, stations, crop, country)
-    para.paralelizar()
+    para.run()
 
     end_time = time.time()
 

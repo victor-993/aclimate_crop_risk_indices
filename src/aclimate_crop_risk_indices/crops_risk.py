@@ -4,7 +4,6 @@ import os
 import multiprocessing
 from aclimate_crop_risk_indices.codigo_calculos_aclimate import main
 from tqdm import tqdm
-import concurrent.futures as fu
 
 class CropsRisk():
 
@@ -69,23 +68,15 @@ class CropsRisk():
                 scenarios[nombre_archivo] = pd.read_csv(archivo)
             self.loaded_scenarios[ws] = scenarios
 
-    def procesar(self, dato):
-        print("ID Estación:", dato["id_estacion"])
-        print("Configuración DataFrame:")
-        print(dato["df_configuracion"])
-        print("="*40)
+    def procesar(self, dato, position):
 
         self.load_scenario(dato["id_estacion"])
 
-        result = main(self.loaded_scenarios[dato["id_estacion"]], dato["df_configuracion"], dato["id_estacion"], dato["id_cultivar"], dato["id_soil"])
+        result = main(self.loaded_scenarios[dato["id_estacion"]], dato["df_configuracion"], dato["id_estacion"], dato["id_cultivar"], dato["id_soil"], position)
         result.to_csv(os.path.join(self.path_outputs_crop, f"{dato['file_name']}.csv"), na_rep=-1, index=False)
 
-    def paralelizar(self):
-        
+    def run(self):       
         self.read_configurations()
 
-        # with fu.ProcessPoolExecutor(max_workers=self.cores) as executor:
-        #     executor.map(self.procesar, self.configurations)
-
         with multiprocessing.Pool(self.cores) as pool:
-            pool.map(self.procesar, self.configurations)
+            pool.starmap(self.procesar, [(dato, i) for i, dato in enumerate(self.configurations)])
